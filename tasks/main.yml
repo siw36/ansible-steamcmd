@@ -1,0 +1,73 @@
+---
+- name: Gather OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "vars/dependencies-{{ ansible_facts['os_family'] }}.yml"
+
+- name: Update OS packages to latest
+  package:
+    name: '*'
+    state: latest
+
+- name: Install dependencies
+  package:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ steamDependencies }}"
+
+- name: Create steam system user
+  user:
+    name: "{{ steamUserName }}"
+    comment: "SteamCMD system user"
+    create_home: true
+    shell: /bin/false
+    system: true
+
+- name: Create the SteamCMD directory
+  file:
+    path: "{{ steamDirectory }}"
+    state: directory
+    mode: 0740
+    owner: "{{ steamUserName }}"
+    group: "{{ steamUserName }}"
+
+- name: Download SteamCMD installer
+  unarchive:
+    src: "{{ steamLink }}"
+    dest: "{{ steamDirectory }}"
+    remote_src: yes
+    owner: "{{ steamUserName }}"
+    group: "{{ steamUserName }}"
+
+- name: Set permissions for SteamCMD directory
+  file:
+    path: "{{ steamDirectory }}"
+    owner: "{{ steamUserName }}"
+    group: "{{ steamUserName }}"
+    recurse: true
+
+- name: Run the installer script
+  shell: "su - {{ steamUserName }} -s /bin/bash -c '{{ steamDirectory }}/steamcmd.sh +quit'"
+
+- name: Set permissions on SteamCMD script
+  file:
+    path: "{{ steamDirectory }}/steamcmd.sh"
+    owner: "{{ steamUserName }}"
+    group: "{{ steamUserName }}"
+    mode: 0770
+
+- name: Include SteamCMD in OS bin path
+  blockinfile:
+    path: "{{ steamBinLink }}"
+    block: |
+      #!/bin/bash
+      if [[ $EUID -ne 0 ]]; then
+        echo "Please run steamcmd as root/with sudo"
+        echo "(it will always be executed as the steam system user)"
+        exit 1
+      fi
+      su - {{ steamUserName }} -s /bin/bash -c "{{ steamDirectory }}/steamcmd.sh $@"
+    owner: root
+    group: "{{ steamUserName }}"
+    create: true
+    mode: 0755

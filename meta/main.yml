@@ -1,0 +1,29 @@
+galaxy_info:
+  author: Robin Klussmann (siw36)
+  description: Role to install SteamCMD
+  company: replicas.io
+
+  license: GPL-3.0-only
+
+  min_ansible_version: 2.4
+
+  platforms:
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+
+  galaxy_tags:
+    - steam
+    - steamcmd
+    - gameserver
+
+dependencies: []

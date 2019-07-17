@@ -1,0 +1,4 @@
+---
+steamDependencies:
+  - glibc.i686
+  - libstdc++.i686

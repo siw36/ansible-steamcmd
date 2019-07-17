@@ -1,0 +1,5 @@
+---
+steamUserName: steam
+steamLink: https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+steamDirectory: /var/lib/steam
+steamBinLink: /usr/bin/steamcmd
