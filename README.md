@@ -9,6 +9,12 @@ This role will make SteamCMD available to all users with sudo permissions.
 The SteamCMD commands itself will always run as a system user called `steam`.  
 The same user should be used to run any games servers.
 
+Get this role
+------------
+```bash
+ansible-galaxy install --roles-path ./roles/ siw36.ansible_steamcmd
+```
+
 Example Playbook
 ----------------
 
