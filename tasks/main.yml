@@ -60,13 +60,18 @@
   blockinfile:
     path: "{{ steamBinLink }}"
     block: |
-      #!/bin/bash
+      !/bin/bash
       if [[ $EUID -ne 0 ]]; then
         echo "Please run steamcmd as root/with sudo"
-        echo "(it will always be executed as the steam system user)"
+        echo "This is needed because a switch user to the steam system user will be performed"
         exit 1
       fi
-      su - {{ steamUserName }} -s /bin/bash -c "{{ steamDirectory }}/steamcmd.sh $@"
+
+      # Start SteamCMD as user steam
+      TARGET_USER="{{ steamUserName }}"
+      STEAM_PATH="{{ steamDirectory }}/steamcmd.sh"
+
+      exec sudo -u "$TARGET_USER" -- "$STEAM_PATH" "$@"
     owner: root
     group: "{{ steamUserName }}"
     create: true
