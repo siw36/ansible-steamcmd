@@ -1,6 +1,8 @@
 ansible-steamcmd
 =========
 
+![Ansible Role](https://img.shields.io/ansible/role/42112.svg?color=blue) ![Ansible Quality Score](https://img.shields.io/ansible/quality/42112.svg?color=blue) ![Ansible Role](https://img.shields.io/ansible/role/d/42112.svg?color=blue)
+
 Description
 ------------
 Ansible role to install/update SteamCMD.  
