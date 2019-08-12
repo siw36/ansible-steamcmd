@@ -66,24 +66,11 @@
       mode: 0770
 
   - name: Include SteamCMD in OS bin path
-    blockinfile:
-      path: "{{ steamBinLink }}"
-      block: |
-        !/bin/bash
-        if [[ $EUID -ne 0 ]]; then
-          echo "Please run steamcmd as root/with sudo"
-          echo "This is needed because a switch user to the steam system user will be performed"
-          exit 1
-        fi
-
-        # Start SteamCMD as user steam
-        TARGET_USER="{{ steamUserName }}"
-        STEAM_PATH="{{ steamDirectory }}/steamcmd.sh"
-
-        exec sudo -u "$TARGET_USER" -- "$STEAM_PATH" "$@"
+    template:
+      src: templates/steamcmd.j2
+      dest: "{{ steamBinLink }}"
       owner: root
       group: "{{ steamUserName }}"
-      create: true
       mode: 0755
 
   when: steamCheck.rc != 0
