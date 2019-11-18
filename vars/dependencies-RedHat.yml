@@ -1,4 +1,6 @@
 ---
 steamDependencies:
+  - tar
+  - gzip
   - glibc.i686
   - libstdc++.i686

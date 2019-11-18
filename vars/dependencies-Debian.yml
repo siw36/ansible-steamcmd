@@ -1,3 +1,5 @@
 ---
 steamDependencies:
+  - tar
+  - gzip
   - lib32gcc1
